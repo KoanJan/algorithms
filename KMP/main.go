@@ -22,10 +22,13 @@ func pattern(pat, raw string) bool {
 	var (
 		k1        int
 		k2        int
-		patBarrel []int = barrel(pat)
-		patLen    int   = len(patArray)
-		rawLen    int   = len(rawArray)
+		patBarrel []int
+		patLen    int
+		rawLen    int
 	)
+	patBarrel = barrel(pat)
+	patLen = len(patArray)
+	rawLen = len(rawArray)
 	fmt.Printf("patBarrel : %v\n", patBarrel)
 	fmt.Printf("patArray : %v\n", patArray)
 	if len(patBarrel) != len(patArray) {
