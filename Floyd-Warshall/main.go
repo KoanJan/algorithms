@@ -8,18 +8,18 @@ import (
 
 func main() {
 	// test
-	picture := NewPicture(5)
+	picture := newPicture(5)
 	fmt.Println("Before: \n")
-	PrintPicture(picture)
-	FloydWarshall(picture)
+	printPicture(picture)
+	floydWarshall(picture)
 	fmt.Println("After: \n")
-	PrintPicture(picture)
-	FloydWarshall(picture)
+	printPicture(picture)
+	floydWarshall(picture)
 	fmt.Println("Again: \n")
-	PrintPicture(picture)
+	printPicture(picture)
 }
 
-func PrintPicture(picture [][]int) {
+func printPicture(picture [][]int) {
 	picStr := ""
 	tab := ""
 	for _, col := range picture {
@@ -37,7 +37,7 @@ func PrintPicture(picture [][]int) {
 	fmt.Println(picStr)
 }
 
-func FloydWarshall(picture [][]int) {
+func floydWarshall(picture [][]int) {
 	length := len(picture)
 	if length == 0 {
 		return
@@ -63,7 +63,7 @@ func FloydWarshall(picture [][]int) {
 	return
 }
 
-func NewPicture(length int) [][]int {
+func newPicture(length int) [][]int {
 	picture := [][]int{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < length; i++ {
