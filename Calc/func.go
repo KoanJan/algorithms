@@ -77,3 +77,16 @@ func Div(a, b int) int {
 	ans >>= 1
 	return ans
 }
+
+// Pow
+func Pow(a, b int) int {
+	if b == 0 {
+		return 1
+	}
+	var ta int = 1
+	for b > 0 {
+		ta = Multi(ta, a)
+		b = Minus(b, 1)
+	}
+	return ta
+}
