@@ -114,13 +114,20 @@ func Mod(a, b int) int {
 
 // Pow
 func Pow(a, b int) int {
-	if b == 0 {
-		return 1
+	var r int = 1
+	for {
+		t := Mod(b, 2)
+		b = Div(b, 2)
+
+		if t == 1 {
+			r *= a
+		}
+
+		if b == 0 {
+			break
+		}
+
+		a *= a
 	}
-	var ta int = 1
-	for b > 0 {
-		ta = Multi(ta, a)
-		b = Minus(b, 1)
-	}
-	return ta
+	return r
 }

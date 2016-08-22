@@ -43,7 +43,7 @@ func main() {
 	fmt.Printf("check answer: %d\n", a5%b5)
 
 	var (
-		a6 int = 8
+		a6 int = 100
 		b6 int = 3
 	)
 	fmt.Printf("pow(%d, %d) = %d\t", a6, b6, Pow(a6, b6))
