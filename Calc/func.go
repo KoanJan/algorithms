@@ -78,6 +78,40 @@ func Div(a, b int) int {
 	return ans
 }
 
+// Mod
+func Mod(a, b int) int {
+	if a < b {
+		return a
+	}
+	if a == b {
+		return 0
+	}
+	var (
+		db int = 1
+		i  int = 1
+	)
+	for a >= b {
+		b <<= 1
+		db = Add(db, 1)
+	}
+	db = Minus(db, 1)
+	for a >= i {
+		i <<= 1
+	}
+	i >>= 1
+	for db >= 0 {
+		if a >= b && a&i > 0 {
+			a = Minus(a, b)
+		}
+		for i > a {
+			i >>= 1
+		}
+		b >>= 1
+		db = Minus(db, 1)
+	}
+	return a
+}
+
 // Pow
 func Pow(a, b int) int {
 	if b == 0 {
