@@ -11,4 +11,6 @@ func main() {
 	fmt.Printf("MergeSort: \n\t%v\n", MergeSort(src))
 	// quick sort
 	fmt.Printf("QuickSort: \n\t%v\n", QuickSort(src))
+	// counting sort
+	fmt.Printf("CountingSort: \n\t%v\n", CountingSort(src))
 }
