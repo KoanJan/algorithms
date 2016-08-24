@@ -13,4 +13,6 @@ func main() {
 	fmt.Printf("QuickSort: \n\t%v\n", QuickSort(src))
 	// counting sort
 	fmt.Printf("CountingSort: \n\t%v\n", CountingSort(src))
+	// radix sort
+	fmt.Printf("RadixSort: \n\t%v\n", RadixSort(src))
 }
