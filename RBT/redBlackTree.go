@@ -86,7 +86,20 @@ func fixUp(t, z *RBT) {
 			z.Node.Parent.Node.Parent.Color = RedColor
 			rightRotate(t, z.Node.Parent.Node.Parent, z.Node.Parent)
 		} else {
-			//
+			// parent is left-child of grandparent
+			y := z.Node.Parent.Node.Parent.Node.Left
+			if y.Color == RedColor {
+				z.Node.Parent.Color = BlackColor
+				y.Color = BlackColor
+				z.Node.Parent.Node.Parent.Color = RedColor
+				z = z.Node.Parent.Node.Parent
+			} else if z == z.Node.Parent.Node.Left {
+				z = z.Node.Parent
+				rightRotate(z.Node.Parent, z, z.Node.Left)
+			}
+			z.Node.Parent.Color = BlackColor
+			z.Node.Parent.Node.Parent.Color = RedColor
+			leftRotate(t, z.Node.Parent.Node.Parent, z.Node.Parent)
 		}
 	}
 	t.Color = BlackColor
