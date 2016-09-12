@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-const MaxChildren int = 3 // maximum of the number of children
+const T int = 2
 
 // BNode B-Tree node
 type BNode struct {
@@ -100,7 +100,7 @@ func (b *BNode) Insert(k int) {
 	// locate
 	if c.IsLeaf {
 		// h = 1
-		if len(c.children) == MaxChildren {
+		if len(c.children) == 2*T-1 {
 			// split
 			splitBNode(c, parent)
 			parent = c
@@ -108,20 +108,20 @@ func (b *BNode) Insert(k int) {
 		}
 	} else {
 		// h > 1
-		if len(c.children) == MaxChildren {
+		if len(c.children) == 2*T-1 {
 			// split
 			splitBNode(c, parent)
 			parent = c
 			c = c.children[c.ChildIndex(k)]
 		}
-		for (!c.IsLeaf) && len(c.children) == MaxChildren {
+		for (!c.IsLeaf) && len(c.children) == 2*T-1 {
 			// k existed
 			if c.Key(k) != -1 {
 				return
 			}
 			parent = c
 			c = c.children[c.ChildIndex(k)]
-			if len(c.children) == MaxChildren {
+			if len(c.children) == 2*T-1 {
 				splitBNode(c, parent)
 			}
 		}
@@ -250,7 +250,7 @@ func splitBNode(node *BNode, parent ...*BNode) {
 func NewBNode(keys ...int) *BNode {
 	node := &BNode{IsLeaf: true}
 	if len(keys) != 0 {
-		if len(keys) >= MaxChildren {
+		if len(keys) >= 2*T-1 {
 			panic("keys is too many")
 		}
 
@@ -275,6 +275,12 @@ func NewBNode(keys ...int) *BNode {
 	return node
 }
 
+// String format output
 func (b *BNode) String() string {
 	return fmt.Sprintf("{keys: %v, children: %v, isLeaf: %v}", b.keys, b.children, b.IsLeaf)
+}
+
+// Delete delete key
+func (b *BNode) Delete(k int) {
+	// TODO
 }

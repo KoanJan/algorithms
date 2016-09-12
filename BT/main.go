@@ -32,4 +32,8 @@ func main() {
 	k = 2
 	node, index = tree.Search(k)
 	fmt.Printf("search %d in tree, node is %v and index is %d\n", k, node, index)
+
+	k = 4
+	node, index = tree.Search(k)
+	fmt.Printf("search %d in tree, node is %v and index is %d\n", k, node, index)
 }
