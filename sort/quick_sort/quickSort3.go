@@ -1,4 +1,4 @@
-package quicksort
+package quick_sort
 
 func QuickSort3(a []int) []int {
 	quickSort2(a, 0, len(a)-1, initializePivot3)
