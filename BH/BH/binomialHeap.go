@@ -1,11 +1,17 @@
 package BH
 
+type BinomialHeap struct {
+	Head *BinomialTree
+	Next *BinomialHeap
+}
+
 // MakeBinomialHeap make a new binomial heap
-func MakeBinomialHeap() *BinomialTree {
-	res := new(BinomialTree)
+func MakeBinomialHeap() *BinomialHeap {
+	res := new(BinomialHeap)
 	return res
 }
 
+// TODO Modify all below
 // BinomialHeapMinimum find the minimum key
 func BinomialHeapMinimum(h *BinomialTree) *BinomialTree {
 	var (
@@ -69,6 +75,10 @@ func binomialLink(y, z *BinomialTree) {
 
 // binomialHeapMerge merge 2 binomial heaps
 func binomialHeapMerge(h1, h2 *BinomialTree) *BinomialTree {
-	// TODO
-	return MakeBinomialHeap()
+
+	var (
+		c1 *BinomialTree = h1
+		c2 *BinomialTree = h2
+	)
+
 }

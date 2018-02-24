@@ -283,4 +283,18 @@ func (b *BNode) String() string {
 // Delete delete key
 func (b *BNode) Delete(k int) {
 	// TODO
+	node := b.Search(k)
+	if node.IsLeaf {
+		//  simple linear find and delete
+		newKeys := []int{}
+		for i := 0; i < node.CountKeys(); i++ {
+			if node.keys[i] != k {
+				newKeys = append(newKeys, node.keys[i])
+			}
+		}
+		node.keys = newKeys
+		node.children = node.children[1:]
+	} else {
+		//
+	}
 }

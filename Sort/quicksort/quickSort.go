@@ -1,4 +1,4 @@
-package main
+package quicksort
 
 // QuickSort
 func QuickSort(a []int) []int {
