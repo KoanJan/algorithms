@@ -2,24 +2,28 @@ package quicksort
 
 import "fmt"
 
-func BetterQuickSort(a []int) []int {
-	betterQuickSort(a, 0, len(a)-1)
+func QuickSort2(a []int) []int {
+	quickSort2(a, 0, len(a)-1, initializePivot2)
 	return a
 }
 
-func betterQuickSort(a []int, l, r int) {
+func initializePivot2(a []int, l, r int) int {
+	return l
+}
+
+func quickSort2(a []int, l, r int, initializePivot PivotInitializer) {
 	if l < r {
 		fmt.Printf("l=%d r=%d\n", l, r)
-		p := partition2(a, l, r)
+		p := partition2(a, l, r, initializePivot)
 		fmt.Printf("get p=%d\n", p)
-		betterQuickSort(a, l, p-1)
-		betterQuickSort(a, p+1, r)
+		quickSort2(a, l, p-1, initializePivot)
+		quickSort2(a, p+1, r, initializePivot)
 	}
 }
 
-func partition2(a []int, start, end int) int {
+func partition2(a []int, start, end int, initializePivot PivotInitializer) int {
 	fmt.Printf("before partition, a: %v\n", a)
-	pivot := a[start]
+	pivot := a[initializePivot(a, start, end)]
 	fmt.Printf("pivot=%d\n", pivot)
 	l, r := start+1, end
 	for l < r {
