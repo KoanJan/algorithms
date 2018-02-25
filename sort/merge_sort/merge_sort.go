@@ -1,17 +1,26 @@
 package merge_sort
 
+import "algorithms/sort/basic_sort"
+
 func MergeSort(a []int) []int {
 	m := len(a) / 2
-	return merge(a[0:m], a[m:])
+	return merge(a[0:m], a[m:], 1, nerverSort)
 }
 
-func merge(a, b []int) []int {
+func nerverSort(a []int, l, r int) {
+}
+
+func merge(a, b []int, threshold int, sorter basic_sort.Sorter) []int {
 	lna, lnb := len(a), len(b)
-	if lna > 1 {
-		a = merge(a[0:lna/2], a[lna/2:])
+	if lna > threshold {
+		a = merge(a[0:lna/2], a[lna/2:], threshold, sorter)
+	} else {
+		sorter(a, 0, lna-1)
 	}
-	if lnb > 1 {
-		b = merge(b[0:lnb/2], b[lnb/2:])
+	if lnb > threshold {
+		b = merge(b[0:lnb/2], b[lnb/2:], threshold, sorter)
+	} else {
+		sorter(b, 0, lnb-1)
 	}
 	result := make([]int, 0, lna+lnb)
 	i, j := 0, 0

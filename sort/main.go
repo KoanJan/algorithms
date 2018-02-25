@@ -14,6 +14,6 @@ func main() {
 
 	src2 := []int{12, 86, 81, 646, 47, 91, 75, 32}
 	// merge sort
-	fmt.Printf("MergeSort: \n\t%v\n", merge_sort.MergeSort(src2))
+	fmt.Printf("MergeSort: \n\t%v\n", merge_sort.MergeSort2(src2, 4))
 
 }
