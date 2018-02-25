@@ -1,4 +1,4 @@
-package main
+package counting_sort
 
 // CountingSort
 func CountingSort(a []int) []int {

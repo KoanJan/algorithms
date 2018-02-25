@@ -52,6 +52,7 @@ func partition2(a []int, start, end int, initializePivot PivotInitializer) int {
 		fmt.Printf("after partition, a: %v\n", a)
 		return r
 	} else {
+		a[start], a[r-1] = a[r-1], a[start]
 		fmt.Printf("after partition, a: %v\n", a)
 		return l - 1
 	}
