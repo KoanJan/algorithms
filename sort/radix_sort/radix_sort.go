@@ -1,4 +1,4 @@
-package main
+package radix_sort
 
 // RadixSort
 func RadixSort(a []int, radix ...int) []int {
@@ -37,6 +37,7 @@ func radixSort(a []int, radix int) {
 		for j = 1; j < r; j++ {
 			count[j] += count[j-1]
 		}
+		// caution: step 'collection' and 'copy' keep numbers in a same bucket in the old order
 		// collection
 		for j = n - 1; j >= 0; j-- {
 			k = (a[j] / radix) % r
@@ -62,12 +63,11 @@ func digit(n, radix int) int {
 }
 
 func maxBit(a []int, radix int) int {
-	m := 1
-	for _, v := range a {
-		_d := digit(v, radix)
-		if _d > m {
-			m = _d
+	max := a[0]
+	for i := 1; i < len(a); i++ {
+		if a[i] > max {
+			max = a[i]
 		}
 	}
-	return m
+	return digit(max, radix)
 }
