@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"algorithms/sort/merge_sort"
+	"algorithms/sort/counting_sort"
 	"algorithms/sort/quick_sort"
 )
 
@@ -14,6 +14,6 @@ func main() {
 
 	src2 := []int{12, 86, 81, 646, 47, 91, 75, 32}
 	// merge sort
-	fmt.Printf("MergeSort: \n\t%v\n", merge_sort.MergeSort2(src2, 4))
+	fmt.Printf("CountingSort: \n\t%v\n", counting_sort.CountingSort(src2))
 
 }

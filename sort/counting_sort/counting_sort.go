@@ -8,6 +8,7 @@ func CountingSort(a []int) []int {
 }
 
 func countingSort(a, b []int, k int) {
+	// we make c for record duplicate value in a
 	c := make([]int, k+1)
 	for j := 0; j < len(a); j++ {
 		c[a[j]] += 1
