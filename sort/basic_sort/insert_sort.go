@@ -12,9 +12,11 @@ func InsertSortAll(a []int) []int {
 func InsertSort(a []int, start, end int) {
 	for i := start; i <= end; i++ {
 		for j := i; j > start; j-- {
-			x, y := a[i], a[j]
-			if x < y {
-				a[i], a[j] = y, x
+			x, y := a[j-1], a[j]
+			if x > y {
+				a[j-1], a[j] = y, x
+			} else {
+				break
 			}
 		}
 	}
