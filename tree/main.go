@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	tree := binary_search_tree.NewBinarySearchTree()
+	tree := binary_search_tree.NewAVLTree()
 	fmt.Println(tree)
 	tree.Insert(5)
 	fmt.Println(tree)
@@ -28,6 +28,18 @@ func main() {
 	fmt.Printf("find %d: %t\n", target, tree.Search(target))
 
 	target = 3
+	fmt.Printf("find %d: %t\n", target, tree.Search(target))
+
+	tree.Delete(target)
+	fmt.Println(tree)
+
+	target = 4
+	fmt.Printf("find %d: %t\n", target, tree.Search(target))
+
+	tree.Delete(target)
+	fmt.Println(tree)
+
+	target = 2
 	fmt.Printf("find %d: %t\n", target, tree.Search(target))
 
 	tree.Delete(target)

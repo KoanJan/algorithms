@@ -5,15 +5,16 @@ import (
 )
 
 type BinarySearchTree struct {
-	node *node
+	node *treeNode
 }
 
-type node struct {
+type treeNode struct {
+	height      int
 	value       int
-	left, right *node
+	left, right *treeNode
 }
 
-func findFromNode(node *node, value int) (parent, target *node) {
+func findFromNode(node *treeNode, value int) (parent, target *treeNode) {
 
 	target = node
 	for target != nil && target.value != value {
@@ -34,7 +35,7 @@ func (bst *BinarySearchTree) Search(value int) bool {
 
 func (bst *BinarySearchTree) Insert(value int) {
 	if bst.node == nil {
-		bst.node = &node{value, nil, nil}
+		bst.node = &treeNode{1, value, nil, nil}
 		return
 	}
 	parent, target := findFromNode(bst.node, value)
@@ -42,9 +43,9 @@ func (bst *BinarySearchTree) Insert(value int) {
 		return
 	}
 	if parent.value > value {
-		parent.left = &node{value, nil, nil}
+		parent.left = &treeNode{1, value, nil, nil}
 	} else {
-		parent.right = &node{value, nil, nil}
+		parent.right = &treeNode{1, value, nil, nil}
 	}
 }
 
@@ -63,7 +64,7 @@ func (bst *BinarySearchTree) Delete(value int) {
 	isLeftChild := parent.value > target.value
 
 	// select the node to swap and construct a new node
-	var newNode *node = nil
+	var newNode *treeNode = nil
 	if target.right != nil && target.left != nil {
 		oldParentOfNewNode := target
 		newNode = target.right
@@ -101,7 +102,7 @@ func (bst *BinarySearchTree) String() string {
 	return fmt.Sprintf("BinarySearchTree: {node: %s}", formatNode(bst.node))
 }
 
-func formatNode(node *node) string {
+func formatNode(node *treeNode) string {
 	if node == nil {
 		return "nil"
 	}
