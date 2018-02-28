@@ -17,7 +17,7 @@ func (tree *AVLTree) Insert(value int) {
 
 func insertNodeIntoAVLTree(node *treeNode, value int) *treeNode {
 	if node == nil {
-		node = &treeNode{1, value, nil, nil}
+		node = &treeNode{height: 1, value: value}
 		return node
 	}
 	if node.value > value {
@@ -26,11 +26,11 @@ func insertNodeIntoAVLTree(node *treeNode, value int) *treeNode {
 		if height(node.left)-height(node.right) > 1 {
 			if height(node.left.left) > height(node.left.right) {
 				// right rotate
-				node = rightRotate(node)
+				node = rightRotateAVL(node)
 			} else {
 				// left right rotate
-				node.right = leftRotate(node.right)
-				node = rightRotate(node)
+				node.right = leftRotateAVL(node.right)
+				node = rightRotateAVL(node)
 			}
 		}
 	} else if node.value < value {
@@ -39,11 +39,11 @@ func insertNodeIntoAVLTree(node *treeNode, value int) *treeNode {
 		if height(node.right)-height(node.left) > 1 {
 			if height(node.right.right) > height(node.right.left) {
 				// left rotate
-				node = leftRotate(node)
+				node = leftRotateAVL(node)
 			} else {
 				// right left rotate
-				node.left = rightRotate(node.left)
-				node = leftRotate(node)
+				node.left = rightRotateAVL(node.left)
+				node = leftRotateAVL(node)
 			}
 		}
 	}
@@ -75,17 +75,17 @@ func deleteNodeFromAVLTree(node *treeNode, value int) *treeNode {
 			node.left = deleteNodeFromAVLTree(node.left, value)
 			if height(node.right)-height(node.left) > 1 {
 				if height(node.right.left) > height(node.right.right) {
-					node.right = rightRotate(node.right)
+					node.right = rightRotateAVL(node.right)
 				}
-				node = leftRotate(node)
+				node = leftRotateAVL(node)
 			}
 		} else {
 			node.right = deleteNodeFromAVLTree(node.right, value)
 			if height(node.left)-height(node.right) > 1 {
 				if height(node.left.right) > height(node.left.left) {
-					node.left = leftRotate(node.left)
+					node.left = leftRotateAVL(node.left)
 				}
-				node = rightRotate(node)
+				node = rightRotateAVL(node)
 			}
 		}
 	}
@@ -120,7 +120,7 @@ func findMin(node *treeNode) *treeNode {
 	return leftChild
 }
 
-func rightRotate(node *treeNode) *treeNode {
+func rightRotateAVL(node *treeNode) *treeNode {
 	newNode := node.left
 	node.left = newNode.right
 	newNode.right = node
@@ -131,7 +131,7 @@ func rightRotate(node *treeNode) *treeNode {
 	return node
 }
 
-func leftRotate(node *treeNode) *treeNode {
+func leftRotateAVL(node *treeNode) *treeNode {
 	newNode := node.right
 	node.right = newNode.left
 	newNode.left = node

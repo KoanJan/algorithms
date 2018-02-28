@@ -8,26 +8,6 @@ type BinarySearchTree struct {
 	node *treeNode
 }
 
-type treeNode struct {
-	height      int
-	value       int
-	left, right *treeNode
-}
-
-func findFromNode(node *treeNode, value int) (parent, target *treeNode) {
-
-	target = node
-	for target != nil && target.value != value {
-		parent = target
-		if target.value > value {
-			target = target.left
-		} else {
-			target = target.right
-		}
-	}
-	return parent, target
-}
-
 func (bst *BinarySearchTree) Search(value int) bool {
 	_, target := findFromNode(bst.node, value)
 	return target != nil
@@ -35,7 +15,7 @@ func (bst *BinarySearchTree) Search(value int) bool {
 
 func (bst *BinarySearchTree) Insert(value int) {
 	if bst.node == nil {
-		bst.node = &treeNode{1, value, nil, nil}
+		bst.node = &treeNode{height: 1, value: value}
 		return
 	}
 	parent, target := findFromNode(bst.node, value)
@@ -43,9 +23,9 @@ func (bst *BinarySearchTree) Insert(value int) {
 		return
 	}
 	if parent.value > value {
-		parent.left = &treeNode{1, value, nil, nil}
+		parent.left = &treeNode{height: 1, value: value}
 	} else {
-		parent.right = &treeNode{1, value, nil, nil}
+		parent.right = &treeNode{height: 1, value: value}
 	}
 }
 
@@ -100,11 +80,4 @@ func NewBinarySearchTree() *BinarySearchTree {
 
 func (bst *BinarySearchTree) String() string {
 	return fmt.Sprintf("BinarySearchTree: {node: %s}", formatNode(bst.node))
-}
-
-func formatNode(node *treeNode) string {
-	if node == nil {
-		return "nil"
-	}
-	return fmt.Sprintf("%d-(%s, %s)", node.value, formatNode(node.left), formatNode(node.right))
 }
