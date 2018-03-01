@@ -32,7 +32,7 @@ func (tree *RedBlackTree) Insert(value int) {
 	} else {
 		parent.right = current
 	}
-	fixUp(current)
+	insertFixUp(current)
 	tree.node.color = black
 }
 
@@ -66,7 +66,7 @@ func rightRotateRedBlack(node *treeNode) *treeNode {
 	return newNode
 }
 
-func fixUp(node *treeNode) {
+func insertFixUp(node *treeNode) {
 	if node == nil {
 		return
 	}
@@ -119,5 +119,17 @@ func fixUp(node *treeNode) {
 }
 
 func (tree *RedBlackTree) Delete(value int) {
-	// TODO
+	_, target := findFromNode(tree.node, value)
+	if target != nil {
+		deleteNodeFromBRedBlackTree(target)
+	}
+}
+
+// TODO
+func deleteNodeFromBRedBlackTree(node *treeNode) {
+	var (
+		child, parent *treeNode
+		color         color
+	)
+
 }
