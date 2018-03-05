@@ -121,15 +121,142 @@ func insertFixUp(node *treeNode) {
 func (tree *RedBlackTree) Delete(value int) {
 	_, target := findFromNode(tree.node, value)
 	if target != nil {
-		deleteNodeFromBRedBlackTree(target)
+		deleteNodeFromBRedBlackTree(tree, target)
 	}
 }
 
-// TODO
-func deleteNodeFromBRedBlackTree(node *treeNode) {
+func deleteNodeFromBRedBlackTree(tree *RedBlackTree, node *treeNode) {
 	var (
 		child, parent *treeNode
 		color         color
 	)
+	parent = node.parent
+	if node.left == nil {
+		if parent.left == node {
+			parent.left = node.right
+			node.parent = nil
+		} else {
+			parent.right = node.right
+			node.parent = nil
+		}
+	} else if node.right == nil {
+		if parent.left == node {
+			parent.left = node.left
+			node.parent = nil
+		} else {
+			parent.right = node.left
+			node.parent = nil
+		}
+	} else {
+		// two children are not nil
+		// 1. find out replace
+		replace := node.left
+		for replace.left != nil {
+			replace = replace.left
+		}
+		// 2.
+		if parent != nil {
+			if parent.left == node {
+				parent.left = replace
+			} else {
+				parent.right = replace
+			}
+		} else {
+			tree.node = replace
+		}
+		child, parent, color = replace.right, replace.parent, replace.color
+		if parent == node {
+			parent = replace
+		} else {
+			if child != nil {
+				child.parent = parent
+				parent.left = child
+			}
+			replace.right = node.right
+			replace.right.parent = replace
+		}
+		replace.parent = node.parent
+		replace.color = node.color
+		replace.left = node.left
+		replace.left.parent = replace
+		if color == black {
+			// fix up
+			deleteFixUp(child, parent, tree.node)
+		}
+	}
+}
 
+// the color of node must be black
+func deleteFixUp(node, parent, root *treeNode) {
+	var other *treeNode
+	for (node == nil || node.color == black) && node != root {
+		if parent.left == node {
+			other = parent.right
+			// 1. other is red
+			if other.color == red {
+				other.color = black
+				parent.color = red
+				leftRotateRedBlack(parent)
+				other = parent.right
+			}
+			// 2. other is black
+			if (other.left == nil || other.left.color == black) && (other.right == nil || other.right.color == black) {
+				// both children of other are black
+				other.color = red
+				node = parent
+				parent = node.parent
+			} else {
+				// the left child of other is red and the right one is black
+				if other.right == nil || other.right.color == black {
+					//
+					other.left.color = black
+					other.color = red
+					rightRotateRedBlack(other)
+					other = parent.right
+				}
+				// the right child of other is red
+				other.color = parent.color
+				parent.color = black
+				other.right.color = black
+				leftRotateRedBlack(parent)
+				other = root
+				break
+			}
+		} else {
+			other = parent.left
+			// 1. other is red
+			if other.color == red {
+				other.color = black
+				parent.color = red
+				rightRotateRedBlack(parent)
+				other = parent.left
+			}
+			// 2. other is black
+			if (other.left == nil || other.left.color == black) && (other.right == nil || other.right.color == black) {
+				// both children of other are black
+				other.color = red
+				node = parent
+				parent = node.parent
+			} else {
+				// the right child of other is red and the left one is black
+				if other.left == nil || other.left.color == black {
+					//
+					other.right.color = black
+					other.color = red
+					leftRotateRedBlack(other)
+					other = parent.left
+				}
+				// the left child of other is red
+				other.color = parent.color
+				parent.color = black
+				other.left.color = black
+				rightRotateRedBlack(parent)
+				other = root
+				break
+			}
+		}
+	}
+	if node != nil {
+		node.color = black
+	}
 }
