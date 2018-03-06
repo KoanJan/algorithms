@@ -31,3 +31,33 @@ func formatNode(node *treeNode) string {
 	}
 	return fmt.Sprintf("%d-(%s, %s)", node.value, formatNode(node.left), formatNode(node.right))
 }
+
+func leftRotate(node *treeNode) {
+	parent := node.parent
+	node.parent = node.right
+	node.parent.parent = parent
+	node.right = node.parent.left
+	node.parent.left = node
+	if parent == nil {
+		if parent.left == node {
+			parent.left = node.parent
+		} else {
+			parent.right = node.parent
+		}
+	}
+}
+
+func rightRotate(node *treeNode) {
+	parent := node.parent
+	node.parent = node.left
+	node.parent.parent = parent
+	node.left = node.parent.right
+	node.parent.right = node
+	if parent == nil {
+		if parent.left == node {
+			parent.left = node.parent
+		} else {
+			parent.right = node.parent
+		}
+	}
+}

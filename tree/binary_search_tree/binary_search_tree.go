@@ -14,19 +14,24 @@ func (bst *BinarySearchTree) Search(value int) bool {
 }
 
 func (bst *BinarySearchTree) Insert(value int) {
-	if bst.node == nil {
-		bst.node = &treeNode{height: 1, value: value}
-		return
+	bst.node = insertNodeIntoBST(bst.node, value)
+}
+
+func insertNodeIntoBST(root *treeNode, value int) *treeNode {
+	if root == nil {
+		root = &treeNode{height: 1, value: value}
+		return root
 	}
-	parent, target := findFromNode(bst.node, value)
+	parent, target := findFromNode(root, value)
 	if target != nil {
-		return
+		return root
 	}
 	if parent.value > value {
 		parent.left = &treeNode{height: 1, value: value}
 	} else {
 		parent.right = &treeNode{height: 1, value: value}
 	}
+	return root
 }
 
 func (bst *BinarySearchTree) Delete(value int) {
