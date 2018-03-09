@@ -81,11 +81,14 @@ func split(node *treeNode, t int) *treeNode {
 func (tree *BTree) Delete(key int) {
 	node, exist := findInBTreeNode(tree.node, key)
 	if exist {
-		tree.node = deleteKeyFromNode(node, key, tree.t)
+		node = deleteKeyFromNode(node, key, tree.t)
+		for node.parent != nil {
+			node = node.parent
+		}
+		tree.node = node
 	}
 }
 
-// TODO finish it
 func deleteKeyFromNode(node *treeNode, key, t int) *treeNode {
 	//
 	idx := indexOfKey(node, key)

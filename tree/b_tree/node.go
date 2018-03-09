@@ -73,37 +73,59 @@ func deleteKey(node *treeNode, key int) {
 }
 
 // combine two children whose indices are 'index' and 'index+1'
-func combine(node *treeNode, index, t int) *treeNode {
-	if node.parent == nil || len(node.keys) > t-1 {
-		key := node.keys[index]
-		deleteKeyWithIndex(node, index)
-		left, right := node.children[index], node.children[index+1]
-		leftLn, rightLn := len(left.keys), len(right.keys)
-		newKeys := make([]int, leftLn+rightLn+1)
-		for i := 0; i < leftLn; i++ {
-			newKeys[i] = left.keys[i]
-		}
-		newKeys[leftLn] = key
-		for i := 0; i < rightLn; i++ {
-			newKeys[i+leftLn+1] = right.keys[i]
-		}
-		newChildren := make([]*treeNode, leftLn+1+rightLn+1)
-		for i := 0; i <= leftLn; i++ {
-			newChildren[i] = left.children[i]
-		}
-		for i := 0; i <= rightLn; i++ {
-			newChildren[i+leftLn+1] = right.children[i]
-		}
-		newNode := &treeNode{newKeys, newChildren, left.leaf, node}
-		node.children[index] = newNode
-		ln := len(node.children)
-		for i := index + 1; i < ln-1; i++ {
-			node.children[i] = node.children[i+1]
-		}
-		node.children = node.children[0 : ln-1]
-	} else {
-		// TODO node's length of keys may be less than t-1
+func combine(node *treeNode, index, t int) {
+	// combine
+	key := node.keys[index]
+	deleteKeyWithIndex(node, index)
+	left, right := node.children[index], node.children[index+1]
+	leftLn, rightLn := len(left.keys), len(right.keys)
+	newKeys := make([]int, leftLn+rightLn+1)
+	for i := 0; i < leftLn; i++ {
+		newKeys[i] = left.keys[i]
 	}
+	newKeys[leftLn] = key
+	for i := 0; i < rightLn; i++ {
+		newKeys[i+leftLn+1] = right.keys[i]
+	}
+	newChildren := make([]*treeNode, leftLn+1+rightLn+1)
+	for i := 0; i <= leftLn; i++ {
+		newChildren[i] = left.children[i]
+	}
+	for i := 0; i <= rightLn; i++ {
+		newChildren[i+leftLn+1] = right.children[i]
+	}
+	newNode := &treeNode{newKeys, newChildren, left.leaf, node}
+	node.children[index] = newNode
+	ln := len(node.children)
+	for i := index + 1; i < ln-1; i++ {
+		node.children[i] = node.children[i+1]
+	}
+	node.children = node.children[0 : ln-1]
+	// node's length of keys may be less than t-1
+	if node.parent != nil && len(node.keys) <= t-1 {
+		pIdx := indexOfChild(node.parent, node)
+		if pIdx > 0 {
+			left := node.parent.children[pIdx-1]
+			if len(left.keys) > t-1 {
+				// borrow
+				borrowFromLeft(node.parent, pIdx)
+			} else {
+				// combine
+				combine(node.parent, pIdx-1, t)
+			}
+		} else {
+			// the number of children of a node must be at least 2
+			right := node.parent.children[pIdx+1]
+			if len(right.keys) > t-1 {
+				// borrow
+				borrowFromRight(node.parent, pIdx)
+			} else {
+				// combine
+				combine(node.parent, pIdx, t)
+			}
+		}
+	}
+
 }
 
 // index: the index of node in parent's children
