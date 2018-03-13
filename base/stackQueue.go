@@ -1,4 +1,4 @@
-package main
+package base
 
 type StackQueue struct {
 	store, cache *Stack

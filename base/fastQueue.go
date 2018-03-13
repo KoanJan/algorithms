@@ -1,4 +1,4 @@
-package main
+package base
 
 type FastQueue struct {
 	head, tail *LinkedList

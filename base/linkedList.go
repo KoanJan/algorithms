@@ -1,4 +1,4 @@
-package main
+package base
 
 type LinkedList struct {
 	V    interface{}

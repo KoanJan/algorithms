@@ -1,4 +1,4 @@
-package main
+package base
 
 // queue
 type Queue interface {
