@@ -11,7 +11,7 @@ const (
 	ColorBlack
 )
 
-func BFS(graph *core.Graph, value int) bool {
+func NaiveBFS(graph *core.Graph, value int) bool {
 	v := graph.Vertex
 	queue := base.NewFastQueue()
 	enqueue(queue, v)
