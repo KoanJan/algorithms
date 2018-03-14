@@ -12,7 +12,10 @@ const (
 )
 
 func NaiveBFS(graph *core.Graph, value int) bool {
-	v := graph.Vertex
+	var v *core.Vertex
+	for v = range graph.Vertices {
+		break
+	}
 	queue := base.NewFastQueue()
 	enqueue(queue, v)
 	for !queue.IsEmpty() {

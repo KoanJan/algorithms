@@ -1,7 +1,7 @@
 package core
 
 type Graph struct {
-	Vertex *Vertex
+	Vertices map[*Vertex]bool
 }
 
 type Color int

@@ -3,7 +3,11 @@ package lib
 import "algorithms/graph/core"
 
 func NaiveDFS(graph *core.Graph, value int) bool {
-	return dfs(graph.Vertex, value)
+	var v *core.Vertex
+	for v = range graph.Vertices {
+		break
+	}
+	return dfs(v, value)
 }
 
 func dfs(vertex *core.Vertex, value int) bool {
