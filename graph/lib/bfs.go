@@ -23,10 +23,9 @@ func NaiveBFS(graph *core.Graph, value int) bool {
 		if node.Value == value {
 			return true
 		}
-		for _, edge := range node.Edges {
-			next := edge.To
-			if next.Color == ColorWhite {
-				enqueue(queue, next)
+		for to := range graph.Edges[node] {
+			if to.Color == ColorWhite {
+				enqueue(queue, to)
 			}
 		}
 		node.Color = ColorBlack

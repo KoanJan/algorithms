@@ -5,12 +5,15 @@ import "algorithms/graph/core"
 func NaiveDFS(graph *core.Graph, value int) bool {
 	var v *core.Vertex
 	for v = range graph.Vertices {
-		break
+		if len(graph.Edges[v]) > 0 {
+			break
+		}
+		return false
 	}
-	return dfs(v, value)
+	return dfs(graph, v, value)
 }
 
-func dfs(vertex *core.Vertex, value int) bool {
+func dfs(graph *core.Graph, vertex *core.Vertex, value int) bool {
 	if vertex.Color == ColorBlack {
 		return false
 	}
@@ -18,8 +21,8 @@ func dfs(vertex *core.Vertex, value int) bool {
 	if vertex.Value == value {
 		return true
 	}
-	for _, edge := range vertex.Edges {
-		if dfs(edge.To, value) {
+	for to := range graph.Edges[vertex] {
+		if dfs(graph, to, value) {
 			return true
 		}
 	}
