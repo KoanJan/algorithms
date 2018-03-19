@@ -6,7 +6,7 @@ import (
 
 func SlowPrim(graph *core.Graph) *core.Graph {
 	// initial
-	g := new(*core.Graph)
+	g := new(core.Graph)
 	g.Vertices = make(map[*core.Vertex]bool)
 	g.Edges = make(map[*core.Vertex]map[*core.Vertex]int)
 	for v := range graph.Vertices {
