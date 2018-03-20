@@ -14,7 +14,7 @@ func BellmanFord(graph *core.Graph, vertex *core.Vertex) (map[*core.Vertex]int, 
 			for t, w := range edge {
 				if _, existed := disMap[s]; existed {
 					_, newVertex := disMap[t]
-					if newVertex || disMap[t] > disMap[s]+w {
+					if !newVertex || disMap[t] > disMap[s]+w {
 						disMap[t] = disMap[s] + w
 						relaxed = true
 					}
