@@ -72,13 +72,13 @@ func insertFixUp(node *treeNode) {
 	}
 	var parent, gparent *treeNode = node.parent, nil
 	// if parent exists and its color is red
-	for parent != nil && parent.color == red {
+	for isRed(parent) {
 		gparent = parent.parent
 		// if parent if the left child of grandparent
 		if gparent.left == parent {
 			uncle := gparent.right
 			// if uncle exists and its color is red
-			if uncle != nil && uncle.color == red {
+			if isRed(uncle) {
 				parent.color = black
 				uncle.color = black
 				gparent.color = red
@@ -97,7 +97,7 @@ func insertFixUp(node *treeNode) {
 		} else {
 			uncle := gparent.left
 			// if uncle exists and its color is red
-			if uncle != nil && uncle.color == red {
+			if isRed(uncle) {
 				parent.color = black
 				uncle.color = black
 				gparent.color = red
@@ -189,25 +189,25 @@ func deleteNodeFromBRedBlackTree(tree *RedBlackTree, node *treeNode) {
 // the color of node must be black
 func deleteFixUp(node, parent, root *treeNode) {
 	var other *treeNode
-	for (node == nil || node.color == black) && node != root {
+	for isBlack(node) && node != root {
 		if parent.left == node {
 			other = parent.right
 			// 1. other is red
-			if other.color == red {
+			if isRed(other) {
 				other.color = black
 				parent.color = red
 				leftRotateRedBlack(parent)
 				other = parent.right
 			}
 			// 2. other is black
-			if (other.left == nil || other.left.color == black) && (other.right == nil || other.right.color == black) {
+			if isBlack(other.left) && isBlack(other.right) {
 				// both children of other are black
 				other.color = red
 				node = parent
 				parent = node.parent
 			} else {
 				// the left child of other is red and the right one is black
-				if other.right == nil || other.right.color == black {
+				if isBlack(other.right) {
 					//
 					other.left.color = black
 					other.color = red
@@ -225,21 +225,21 @@ func deleteFixUp(node, parent, root *treeNode) {
 		} else {
 			other = parent.left
 			// 1. other is red
-			if other.color == red {
+			if isRed(other) {
 				other.color = black
 				parent.color = red
 				rightRotateRedBlack(parent)
 				other = parent.left
 			}
 			// 2. other is black
-			if (other.left == nil || other.left.color == black) && (other.right == nil || other.right.color == black) {
+			if isBlack(other.left) && isBlack(other.right) {
 				// both children of other are black
 				other.color = red
 				node = parent
 				parent = node.parent
 			} else {
 				// the right child of other is red and the left one is black
-				if other.left == nil || other.left.color == black {
+				if isBlack(other.left) {
 					//
 					other.right.color = black
 					other.color = red
@@ -259,4 +259,12 @@ func deleteFixUp(node, parent, root *treeNode) {
 	if node != nil {
 		node.color = black
 	}
+}
+
+func isBlack(node *treeNode) bool {
+	return node == nil || node.color == black
+}
+
+func isRed(node *treeNode) bool {
+	return !isBlack(node)
 }
