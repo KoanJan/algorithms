@@ -12,6 +12,7 @@ const (
 // 4. both left and right children of each red node must be black
 // 5. all the routes from any node to all its leaf children contain the same number of black nodes
 
+// TODO fix all about RBT
 type RedBlackTree struct {
 	node *treeNode
 }
