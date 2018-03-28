@@ -45,13 +45,11 @@ func (queue priorityQueue) Swap(i, j int) {
 
 func (queue *priorityQueue) Push(x interface{}) {
 	*queue = append(*queue, x.(PriorityItem))
-	heap.Fix(queue, queue.Len()-1)
 }
 
 func (queue *priorityQueue) Pop() interface{} {
 	n := len(*queue)
 	x := (*queue)[n-1]
 	*queue = (*queue)[0 : n-1]
-	heap.Fix(queue, n)
 	return x
 }
