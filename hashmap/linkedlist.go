@@ -1,7 +1,7 @@
 package hashmap
 
 type linkedList struct {
-	Key  *string
+	Key  string
 	Val  interface{}
 	Next *linkedList
 }

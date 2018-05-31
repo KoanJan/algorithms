@@ -24,30 +24,35 @@ func (h *hashMap) Cap() int {
 // Put val into map index by key
 func (h *hashMap) Put(k string, v interface{}) {
 
+	// check capacity
 	if h.needExpansion() {
 		h.expand()
 	}
 
+	// insert
 	index := hashCode(k) % h.capacity
 	if h.buckets[index] == nil {
 		// init linked list
-		h.buckets[index] = &linkedList{Key: &k, Val: v}
+		h.buckets[index] = &linkedList{Key: k, Val: v}
 	} else {
 		l := h.buckets[index]
-		for *l.Key != k {
+		for l.Key != k {
 			if l.Next == nil {
 				break
 			}
 			l = l.Next
 		}
-		if *l.Key == k {
+		if l.Key == k {
 			// update
 			l.Val = v
 		} else {
 			// append
-			l.Next = &linkedList{Key: &k, Val: v}
+			l.Next = &linkedList{Key: k, Val: v}
+			// update capacity
+			h.capacity += 1
 		}
 	}
+
 	return
 }
 
@@ -58,12 +63,34 @@ func (h *hashMap) Get(k string) (interface{}, bool) {
 		return nil, false
 	}
 	l := h.buckets[index]
-	for *l.Key != k {
+	for l.Key != k {
 		if l = l.Next; l == nil {
 			return nil, false
 		}
 	}
 	return l.Val, true
+}
+
+func (h *hashMap) Del(k string) {
+	index := hashCode(k) % h.capacity
+	bucket := h.buckets[index]
+	if bucket == nil {
+		return
+	} else if bucket.Key == k {
+		h.buckets[index] = bucket.Next
+		// update capacity
+		h.capacity -= 1
+		return
+	}
+	for bucket.Next != nil {
+		if bucket.Next.Key == k {
+			bucket.Next = bucket.Next.Next
+			// update capacity
+			h.capacity -= 1
+			return
+		}
+		bucket = bucket.Next
+	}
 }
 
 func (h *hashMap) needExpansion() bool {
@@ -81,7 +108,7 @@ func (h *hashMap) expand() {
 	// copy data
 	for _, bucket := range h.buckets {
 		for bucket != nil {
-			index := hashCode(*bucket.Key) % size
+			index := hashCode(bucket.Key) % size
 			// insert to the head of linked list
 			newBuckets[index] = &linkedList{bucket.Key, bucket.Val, newBuckets[index]}
 		}
