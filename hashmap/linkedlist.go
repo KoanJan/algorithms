@@ -1,4 +1,4 @@
-package main
+package hashmap
 
 type linkedList struct {
 	Key  *string

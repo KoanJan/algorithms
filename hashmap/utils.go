@@ -1,4 +1,4 @@
-package main
+package hashmap
 
 // hashCode calculates hashcode of string value
 // TODO: it can be better while calculating mod

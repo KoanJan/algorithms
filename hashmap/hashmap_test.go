@@ -1,11 +1,12 @@
-package main
+package hashmap
 
 import (
 	"fmt"
+	"testing"
 )
 
-// $: go run *.go
-func main() {
+func TestHashMap(t *testing.T) {
+
 	// test
 	m := NewHashMap()
 	m.Put("Tony", "Hong")
