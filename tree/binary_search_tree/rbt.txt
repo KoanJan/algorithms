@@ -1,0 +1,232 @@
+// this file is note of RBT principle (coded by Go while studying)
+
+package binary_search_tree
+
+// Restrict of RedBlackTree:
+// 1. the color of tree node can be red or black
+// 2. the root is black
+// 3. each leaf(nil node) is black
+// 4. both left and right children of each red node must be black
+// 5. all the routes from any node to all its leaf children contain the same number of black nodes
+
+// TODO fix all about RBT
+type RBT struct {
+	node *treeNode
+}
+
+func grandParent(n *treeNode) *treeNode {
+	return n.parent.parent
+}
+
+func uncle(n *treeNode) *treeNode {
+	gp := grandParent(n)
+	if n.parent == gp.left {
+		return gp.right
+	} else {
+		return gp.left
+	}
+}
+
+func insertCase1(n *treeNode) {
+	if n.parent == nil {
+		n.color = black
+	} else {
+		insertCase2(n)
+	}
+}
+
+func insertCase2(n *treeNode) {
+	if n.parent.color == black {
+	} else {
+		insertCase3(n)
+	}
+}
+
+func insertCase3(n *treeNode) {
+	u := uncle(n)
+	gp := grandParent(n)
+	// the color of parent must be 'red'
+	// so the color of grandparent must be 'black'
+	if colorOf(u) == red {
+		n.parent.color = black
+		u.color = black
+		gp.color = red
+		insertCase1(gp)
+	} else {
+		insertCase4(n)
+	}
+}
+
+// in this case, parent is red, uncle is black, grandparent is black.
+// for keeping the number of black nodes of each branch(parent and uncle),
+// rotate is chose
+// etc. attempt that the parent is the left child of grandparent
+func insertCase4(n *treeNode) {
+	if n == n.parent.right {
+		// left rotate with parent
+		gp := grandParent(n)
+		p := n.parent
+		p.parent = n
+		p.right = n.left
+		n.left = p
+		n.parent = gp
+		gp.left = n
+		// relocate n
+		n = p
+	}
+	insertCase5(n)
+}
+
+// in this case, parent is read, uncle is black, grandparent is black.
+// for keeping the number of black nodes of each branch(parent and uncle),
+// right rotate because n is the left child of its parent
+func insertCase5(n *treeNode) {
+	p := n.parent
+	gp := grandParent(n)
+	// check the gp is the left child of its parent
+	ggp := gp.parent
+	if ggp != nil {
+		if ggp.left == gp {
+			ggp.left = p
+		} else {
+			ggp.right = p
+		}
+	}
+	// rotate
+	p.parent = ggp
+	gp.parent = p
+	gp.left = p.right
+	p.right = gp
+	// fix color
+	p.color = black
+	gp.color = red
+	// for the old grandparent's color is black as same as the 'p'
+	// so recursion is not in need.
+}
+
+// deletion of simple cases
+// 1: son is red and the node is black
+// 2: son is black and the node is red
+// impossible case: both son and node are red
+
+func sibling(n *treeNode) *treeNode {
+	if n == n.parent.left {
+		return n.parent.right
+	}
+	return n.parent.left
+}
+
+// while both the deleting node and its son are black
+
+// etc. below n is the replacer if the deleting node
+
+// case: n is the new root
+func deleteCase1(n *treeNode) {
+	if n.parent != nil {
+		deleteCase2(n)
+	}
+}
+
+// etc. attempt that n is the left child of its parent
+
+func deleteCase2(n *treeNode) {
+	// left rotate with p to recover the black number of deleted branch
+	// set s as the grandparent
+	// set s black and set p red
+	s := sibling(n)
+	// s is red
+	if colorOf(s) == red {
+		// left rotate with p
+		p := n.parent
+		sl := s.left
+		p.right = sl
+		sl.parent = p
+		s.left = p
+		// fix color
+		s.color = black
+		p.color = red
+		// new p is red, new s is black from old sl
+		// case 3
+		deleteCase4(n)
+	} else {
+		// s is black
+		if s.right.color == red {
+			deleteCase6(n)
+		} else if s.left.color == red {
+			deleteCase5(n)
+		} else {
+			// both black
+			p := n.parent
+			if p.color == black {
+				// case3
+				deleteCase3(n)
+			} else {
+				// case4
+				deleteCase4(n)
+			}
+		}
+	}
+}
+
+// p, s, sl, sr are black
+func deleteCase3(n *treeNode) {
+	sibling(n).color = red
+	// black number of p decreased by 1
+	// but the black number of n equals to the one of s
+	deleteCase1(n.parent)
+}
+
+// p is red, others are black
+func deleteCase4(n *treeNode) {
+	sibling(n).color = red
+	n.parent.color = black
+	// increase the black number of branch n with 1
+}
+
+// s and sr are black, sl is red
+func deleteCase5(n *treeNode) {
+	// right rotate with s
+	// so that the black number of s branch from p increase by 1
+	p := n.parent
+	s := p.right
+	sl := s.left
+	// rotate
+	p.right = sl
+	sl.parent = p
+	s.left = sl.right
+	sl.right = s
+	s.parent = sl
+	// fix color
+	s.color, sl.color = sl.color, s.color
+	deleteCase6(n)
+}
+
+// sr is red, p and sl can be red and black, n is black
+func deleteCase6(n *treeNode) {
+	// left rotate with p
+	p := n.parent
+	gp := p.parent
+	s := p.right
+	// rotate
+	if gp != nil {
+		if gp.left == p {
+			gp.left = s
+		} else {
+			gp.right = s
+		}
+	}
+	p.parent = s
+	p.right = s.left
+	s.left = p
+	// fix color
+	s.color = p.color
+	p.color = black
+	s.right.color = black
+}
+
+func colorOf(n *treeNode) color {
+	if n != nil && n.color == red {
+		return red
+	}
+	return black
+}
