@@ -22,7 +22,7 @@ func BellmanFord(g *core.G, s core.V) (map[core.V]int, bool) {
 			}
 		}
 	}
-	// iterate to check minus w exists if 'd(v) > d(u) + w(u, v)'
+	// iterate to check if minus w exists by 'd(v) > d(u) + w(u, v)'
 	for u, e := range g.Es {
 		for v, w := range e {
 			if d[v] > d[u]+w {
