@@ -1,6 +1,7 @@
 package core
 
-const Unreachable = 1<<63 - 1
+// in order to avoid from overflowing
+const Unreachable = 1<<32 - 1
 
 // E means edge
 type E struct {
