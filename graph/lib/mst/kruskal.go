@@ -5,34 +5,34 @@ import (
 	"algorithms/graph/core"
 )
 
-func Kruskal(graph *core.Graph) *core.Graph {
+func Kruskal(g *core.G) *core.G {
 
 	// initial mst
-	mst := new(core.Graph)
-	mst.Vertices = core.CopyVertices(graph.Vertices)
-	mst.Edges = make(map[*core.Vertex]map[*core.Vertex]int)
-	for v := range mst.Vertices {
-		mst.Edges[v] = make(map[*core.Vertex]int)
+	mst := new(core.G)
+	mst.Vs = core.CopyVertices(g.Vs)
+	mst.Es = make(map[*core.V]map[*core.V]int)
+	for v := range mst.Vs {
+		mst.Es[v] = make(map[*core.V]int)
 	}
 	// prepare data structure
-	edgeQueue := base.NewPriorityQueue()
-	for v1, m := range graph.Edges {
+	eq := base.NewPriorityQueue()
+	for v1, m := range g.Es {
 		for v2, w := range m {
-			edgeQueue.Enqueue(core.NewEdge(v1, v2, w))
+			eq.Enqueue(core.NewEdge(v1, v2, w))
 		}
 	}
-	vertices := make([]interface{}, 0, len(graph.Vertices))
-	for v := range graph.Vertices {
-		vertices = append(vertices, v)
+	vs := make([]interface{}, 0, len(g.Vs))
+	for v := range g.Vs {
+		vs = append(vs, v)
 	}
-	set := base.NewUnionFindSet(vertices...)
-	for !edgeQueue.IsEmpty() {
+	set := base.NewUnionFindSet(vs...)
+	for !eq.IsEmpty() {
 		// Kruskal
-		edge := edgeQueue.Dequeue().(*core.Edge)
-		if set.Find(edge.From) != set.Find(edge.To) {
-			set.SetParent(edge.To, edge.From)
-			mst.Edges[edge.From][edge.To] = edge.W
-			mst.Edges[edge.To][edge.From] = edge.W
+		e := eq.Dequeue().(*core.E)
+		if set.Find(e.From) != set.Find(e.To) {
+			set.SetParent(e.To, e.From)
+			mst.Es[e.From][e.To] = e.W
+			mst.Es[e.To][e.From] = e.W
 		}
 	}
 	return mst

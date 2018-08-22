@@ -5,17 +5,17 @@ import (
 	"algorithms/graph/core"
 )
 
-func Dijkstra(graph *core.Graph, vertex *core.Vertex) map[*core.Vertex]int {
+func Dijkstra(g *core.G, v *core.V) map[*core.V]int {
 
-	disMap := make(map[*core.Vertex]int)
-	disMap[vertex] = 0
+	disMap := make(map[*core.V]int)
+	disMap[v] = 0
 	disQueue := base.NewPriorityQueue()
-	disQueue.Enqueue(core.NewEdge(vertex, vertex, 0))
+	disQueue.Enqueue(core.NewEdge(v, v, 0))
 	for !disQueue.IsEmpty() {
-		e := disQueue.Dequeue().(*core.Edge)
-		for to, weight := range graph.Edges[e.To] {
+		e := disQueue.Dequeue().(*core.E)
+		for to, weight := range g.Es[e.To] {
 			// record the distance from the head vertex
-			disQueue.Enqueue(core.NewEdge(vertex, to, weight+e.W))
+			disQueue.Enqueue(core.NewEdge(v, to, weight+e.W))
 		}
 		// compare and save the smallest distance
 		d, exited := disMap[e.To]

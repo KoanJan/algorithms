@@ -11,19 +11,19 @@ const (
 	ColorBlack
 )
 
-func NaiveBFS(graph *core.Graph, value int) bool {
-	var v *core.Vertex
-	for v = range graph.Vertices {
+func NaiveBFS(g *core.G, value int) bool {
+	var v *core.V
+	for v = range g.Vs {
 		break
 	}
 	queue := base.NewFastQueue()
 	enqueue(queue, v)
 	for !queue.IsEmpty() {
-		node := queue.Dequeue().(*core.Vertex)
+		node := queue.Dequeue().(*core.V)
 		if node.Value == value {
 			return true
 		}
-		for to := range graph.Edges[node] {
+		for to := range g.Es[node] {
 			if to.Color == ColorWhite {
 				enqueue(queue, to)
 			}
@@ -33,7 +33,7 @@ func NaiveBFS(graph *core.Graph, value int) bool {
 	return false
 }
 
-func enqueue(queue base.Queue, v *core.Vertex) {
+func enqueue(q base.Queue, v *core.V) {
 	v.Color = ColorGray
-	queue.Enqueue(v)
+	q.Enqueue(v)
 }

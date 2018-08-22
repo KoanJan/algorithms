@@ -2,27 +2,27 @@ package lib
 
 import "algorithms/graph/core"
 
-func NaiveDFS(graph *core.Graph, value int) bool {
-	var v *core.Vertex
-	for v = range graph.Vertices {
-		if len(graph.Edges[v]) > 0 {
+func NaiveDFS(g *core.G, value int) bool {
+	var v *core.V
+	for v = range g.Vs {
+		if len(g.Es[v]) > 0 {
 			break
 		}
 		return false
 	}
-	return dfs(graph, v, value)
+	return dfs(g, v, value)
 }
 
-func dfs(graph *core.Graph, vertex *core.Vertex, value int) bool {
-	if vertex.Color == ColorBlack {
+func dfs(g *core.G, v *core.V, value int) bool {
+	if v.Color == ColorBlack {
 		return false
 	}
-	vertex.Color = ColorBlack
-	if vertex.Value == value {
+	v.Color = ColorBlack
+	if v.Value == value {
 		return true
 	}
-	for to := range graph.Edges[vertex] {
-		if dfs(graph, to, value) {
+	for to := range g.Es[v] {
+		if dfs(g, to, value) {
 			return true
 		}
 	}
