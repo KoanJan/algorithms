@@ -5,10 +5,10 @@ import (
 )
 
 func SlowPrim(graph *core.G) *core.G {
-	// initial
+	// init
 	g := new(core.G)
-	g.Vs = make(map[*core.V]bool)
-	g.Es = make(map[*core.V]map[*core.V]int)
+	g.Vs = make(map[core.V]bool)
+	g.Es = make(map[core.V]map[core.V]int)
 	for v := range graph.Vs {
 		g.Vs[v] = true
 		break
@@ -16,7 +16,7 @@ func SlowPrim(graph *core.G) *core.G {
 	// compare
 	for !equalVertices(g.Vs, graph.Vs) {
 		v1, v2, w := scan(g, graph)
-		if v1 == nil {
+		if v1 == core.NonexistV {
 			panic("unknown error")
 		}
 		g.Vs[v2] = true
@@ -26,7 +26,7 @@ func SlowPrim(graph *core.G) *core.G {
 	return g
 }
 
-func scan(g1, g2 *core.G) (*core.V, *core.V, int) {
+func scan(g1, g2 *core.G) (core.V, core.V, int) {
 	for v1 := range g1.Vs {
 		rankLimit := len(g2.Es[v1])
 		for rank := 1; rank <= rankLimit; rank++ {
@@ -36,13 +36,13 @@ func scan(g1, g2 *core.G) (*core.V, *core.V, int) {
 			}
 		}
 	}
-	return nil, nil, -1
+	return core.NonexistV, core.NonexistV, -1
 }
 
 // rank must be larger than 0
-func minW(w map[*core.V]int, rank int) (*core.V, int) {
-	abort := make(map[*core.V]bool)
-	var minV *core.V
+func minW(w map[core.V]int, rank int) (core.V, int) {
+	abort := make(map[core.V]bool)
+	var minV core.V
 	minW := -1
 	for ; rank > 0; rank-- {
 		// initial
@@ -65,7 +65,7 @@ func minW(w map[*core.V]int, rank int) (*core.V, int) {
 	return minV, minW
 }
 
-func equalVertices(vc1, vc2 map[*core.V]bool) bool {
+func equalVertices(vc1, vc2 map[core.V]bool) bool {
 	if len(vc1) != len(vc2) {
 		return false
 	}

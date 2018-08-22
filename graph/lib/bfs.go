@@ -5,35 +5,32 @@ import (
 	"algorithms/graph/core"
 )
 
-const (
-	ColorWhite core.Color = iota
-	ColorGray
-	ColorBlack
-)
-
-func NaiveBFS(g *core.G, value int) bool {
-	var v *core.V
-	for v = range g.Vs {
+func NaiveBFS(g *core.G, dst core.V) bool {
+	// map vertex and color
+	vc := make(map[core.V]Color, len(g.Vs))
+	for v := range g.Vs {
+		vc[v] = White
+	}
+	// init queue
+	q := base.NewFastQueue()
+	for v := range g.Vs {
+		q.Enqueue(v)
+		vc[v] = Gray
 		break
 	}
-	queue := base.NewFastQueue()
-	enqueue(queue, v)
-	for !queue.IsEmpty() {
-		node := queue.Dequeue().(*core.V)
-		if node.Value == value {
+	// iterate
+	for !q.IsEmpty() {
+		from := q.Dequeue().(core.V)
+		if from == dst {
 			return true
 		}
-		for to := range g.Es[node] {
-			if to.Color == ColorWhite {
-				enqueue(queue, to)
+		for to := range g.Es[from] {
+			if vc[to] == White {
+				q.Enqueue(to)
+				vc[to] = Gray
 			}
 		}
-		node.Color = ColorBlack
+		vc[from] = Black
 	}
 	return false
-}
-
-func enqueue(q base.Queue, v *core.V) {
-	v.Color = ColorGray
-	q.Enqueue(v)
 }

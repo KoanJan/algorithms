@@ -10,9 +10,9 @@ func Kruskal(g *core.G) *core.G {
 	// initial mst
 	mst := new(core.G)
 	mst.Vs = core.CopyVertices(g.Vs)
-	mst.Es = make(map[*core.V]map[*core.V]int)
+	mst.Es = make(map[core.V]map[core.V]int)
 	for v := range mst.Vs {
-		mst.Es[v] = make(map[*core.V]int)
+		mst.Es[v] = make(map[core.V]int)
 	}
 	// prepare data structure
 	eq := base.NewPriorityQueue()

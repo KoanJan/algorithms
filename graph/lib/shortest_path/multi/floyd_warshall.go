@@ -2,11 +2,11 @@ package multi
 
 import "algorithms/graph/core"
 
-func FloydWarshall(g *core.G) map[*core.V]map[*core.V]int {
+func FloydWarshall(g *core.G) map[core.V]map[core.V]int {
 	// initial
-	disMap := make(map[*core.V]map[*core.V]int)
+	disMap := make(map[core.V]map[core.V]int)
 	for v := range g.Vs {
-		disMap[v] = make(map[*core.V]int)
+		disMap[v] = make(map[core.V]int)
 		disMap[v][v] = 0
 	}
 	// iterate
