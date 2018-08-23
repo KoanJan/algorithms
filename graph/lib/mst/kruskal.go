@@ -8,11 +8,9 @@ import (
 func Kruskal(g *core.G) *core.G {
 
 	// initial mst
-	mst := new(core.G)
-	mst.Vs = core.CopyVertices(g.Vs)
-	mst.Es = make(map[core.V]map[core.V]int)
-	for v := range mst.Vs {
-		mst.Es[v] = make(map[core.V]int)
+	g1 := core.NewG()
+	for v := range g.Vs {
+		g1.AddV(v)
 	}
 	// prepare data structure
 	eq := base.NewPriorityQueue()
@@ -21,20 +19,17 @@ func Kruskal(g *core.G) *core.G {
 			eq.Enqueue(core.NewEdge(v1, v2, w))
 		}
 	}
-	vs := make([]interface{}, 0, len(g.Vs))
+	set := base.NewUFS()
 	for v := range g.Vs {
-		vs = append(vs, v)
+		set.Add(int(v))
 	}
-	set := base.NewUnionFindSet(vs...)
 	for !eq.IsEmpty() {
 		// Kruskal
 		e := eq.Dequeue().(*core.E)
-		if set.Find(e.From) != set.Find(e.To) {
-			set.SetParent(e.To, e.From)
-			mst.Es[e.From][e.To] = e.W
-			mst.Es[e.To][e.From] = e.W
+		if !set.IsUnion(int(e.From), int(e.To)) {
+			set.Union(int(e.From), int(e.To))
+			g1.AddNonDirectiveE(e.From, e.To, e.W)
 		}
 	}
-	return mst
-
+	return g1
 }

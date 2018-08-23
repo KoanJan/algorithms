@@ -45,7 +45,9 @@ func (g *G) String() string {
 	buf.WriteString("\ne: \n")
 	for v1, e := range g.Es {
 		for v2, w := range e {
-			buf.WriteString(fmt.Sprintf("%d - %d: %d\n", v1, v2, w))
+			if v1 != v2 && w < Unreachable {
+				buf.WriteString(fmt.Sprintf("%d - %d: %d\n", v1, v2, w))
+			}
 		}
 	}
 	return buf.String()

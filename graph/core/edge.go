@@ -9,8 +9,8 @@ type E struct {
 	W        int
 }
 
-func (edge E) Priority() int {
-	return -edge.W
+func (edge *E) Priority() int {
+	return edge.W
 }
 
 func NewEdge(from, to V, w int) *E {
