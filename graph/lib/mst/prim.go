@@ -2,77 +2,63 @@ package mst
 
 import (
 	"algorithms/graph/core"
+	"fmt"
 )
 
-func SlowPrim(graph *core.G) *core.G {
-	// init
-	g := new(core.G)
-	g.Vs = make(map[core.V]bool)
-	g.Es = make(map[core.V]map[core.V]int)
-	for v := range graph.Vs {
-		g.Vs[v] = true
+func Prim(g *core.G) *core.G {
+	// init mst
+	g1 := core.NewG()
+	for v := range g.Vs {
+		g1.Vs[v] = true
 		break
 	}
-	// compare
-	for !equalVertices(g.Vs, graph.Vs) {
-		v1, v2, w := scan(g, graph)
-		if v1 == core.NonexistV {
-			panic("unknown error")
-		}
-		g.Vs[v2] = true
-		g.Es[v1][v2] = w
-		g.Es[v2][v1] = w
-	}
-	return g
-}
+	var (
+		minV1 = core.NonexistV
+		minV2 = core.NonexistV
+		minW  = core.Unreachable
+		todo  = len(g.Vs) - 1
+	)
+	// scan until all vertex added into g1
+	for i := 0; i < todo; i++ {
 
-func scan(g1, g2 *core.G) (core.V, core.V, int) {
-	for v1 := range g1.Vs {
-		rankLimit := len(g2.Es[v1])
-		for rank := 1; rank <= rankLimit; rank++ {
-			v2, w := minW(g2.Es[v1], rank)
-			if !g1.Vs[v2] {
-				return v1, v2, w
+		fmt.Println(g1)
+		// reset minW
+		minW = core.Unreachable
+		// scan
+		for v2 := range g.Vs {
+			// existed vertex
+			if g1.Vs[v2] {
+				continue
+			}
+			// iterate
+			oldMinW := minW
+			for v1 := range g1.Vs {
+				if g.Es[v1][v2] < minW {
+					minW = g.Es[v1][v2]
+					minV1 = v1
+				}
+				if g.Es[v2][v1] < minW {
+					minW = g.Es[v2][v1]
+					minV1 = v1
+				}
+			}
+			if minW < oldMinW {
+				minV2 = v2
 			}
 		}
+		// add new vertex into g1
+		g1.Vs[minV2] = true
+		if len(g1.Es[minV1]) == 0 {
+			g1.Es[minV1] = map[core.V]int{minV2: minW}
+		} else {
+			g1.Es[minV1][minV2] = minW
+		}
+		if len(g1.Es[minV2]) == 0 {
+			g1.Es[minV2] = map[core.V]int{minV1: minW}
+		} else {
+			g1.Es[minV2][minV1] = minW
+		}
 	}
-	return core.NonexistV, core.NonexistV, -1
-}
 
-// rank must be larger than 0
-func minW(w map[core.V]int, rank int) (core.V, int) {
-	abort := make(map[core.V]bool)
-	var minV core.V
-	minW := -1
-	for ; rank > 0; rank-- {
-		// initial
-		for v, we := range w {
-			if !abort[v] {
-				minV = v
-				minW = we
-				break
-			}
-		}
-		// compare
-		for v, we := range w {
-			if !abort[v] && we < minW {
-				minV = v
-				minW = we
-			}
-		}
-		abort[minV] = true
-	}
-	return minV, minW
-}
-
-func equalVertices(vc1, vc2 map[core.V]bool) bool {
-	if len(vc1) != len(vc2) {
-		return false
-	}
-	for v1 := range vc1 {
-		if _, existed := vc2[v1]; !existed {
-			return false
-		}
-	}
-	return true
+	return g1
 }
