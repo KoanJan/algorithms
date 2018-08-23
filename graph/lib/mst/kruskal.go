@@ -16,7 +16,7 @@ func Kruskal(g *core.G) *core.G {
 	eq := base.NewPriorityQueue()
 	for v1, m := range g.Es {
 		for v2, w := range m {
-			eq.Enqueue(core.NewEdge(v1, v2, w))
+			eq.Enqueue(core.NewE(v1, v2, w))
 		}
 	}
 	set := base.NewUFS()
