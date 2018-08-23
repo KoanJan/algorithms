@@ -69,3 +69,9 @@ func testDijkstra() map[core.V]int {
 func TestDijkstra(t *testing.T) {
 	t.Log(testDijkstra())
 }
+
+func BenchmarkDijkstra(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		testDijkstra()
+	}
+}
