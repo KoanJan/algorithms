@@ -35,13 +35,13 @@ func (h *BinaryHeap) Pop() base.Valuable {
 			if (*h)[idx].Value() < (*h)[lCIdx+1].Value() {
 				(*h)[idx], (*h)[lCIdx+1] = (*h)[lCIdx+1], (*h)[idx]
 				idx = lCIdx + 1
-				lCIdx = 1 + idx<<1
+				lCIdx = (idx << 1) | 1
 				continue
 			}
 		} else if (*h)[idx].Value() < (*h)[lCIdx].Value() {
 			(*h)[idx], (*h)[lCIdx] = (*h)[lCIdx], (*h)[idx]
 			idx = lCIdx
-			lCIdx = 1 + idx<<1
+			lCIdx = (idx << 1) | 1
 			continue
 		}
 		break
