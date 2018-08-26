@@ -1,8 +1,10 @@
 package heap
 
-type BinaryHeap []Valuable
+import "algorithms/base"
 
-func (h *BinaryHeap) Insert(v Valuable) {
+type BinaryHeap []base.Valuable
+
+func (h *BinaryHeap) Insert(v base.Valuable) {
 	idx := len(*h)
 	var p int
 	*h = append(*h, v)
@@ -17,7 +19,7 @@ func (h *BinaryHeap) Insert(v Valuable) {
 	}
 }
 
-func (h *BinaryHeap) Pop() Valuable {
+func (h *BinaryHeap) Pop() base.Valuable {
 	n := len(*h)
 	if n == 0 {
 		return nil
