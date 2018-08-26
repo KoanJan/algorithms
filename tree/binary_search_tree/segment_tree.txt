@@ -1,0 +1,41 @@
+// This file is coded with Go, but only acted as a explanation.
+
+package binary_search_tree
+
+type SegmentNode struct {
+	lazy bool
+	// other information if in need can be set in a new field
+}
+
+// SegmentTree explanation for its principle
+type SegmentTree []SegmentNode
+
+func NewSegmentTree(n int) *SegmentTree {
+	tree := make(SegmentTree, n<<2)
+	buildSegmentTree(tree, 1, 1, n)
+	return &tree
+}
+
+func buildSegmentTree(tree SegmentTree, idx int, left, right int) {
+	if left == right {
+		// leaf node
+		// save some data or not
+		return
+	}
+	mid := (left + right) >> 1
+	// here you can set mid or any information if you want in the node of 'idx'
+	// recursion build
+	buildSegmentTree(tree, idx<<1, left, mid-1)
+	buildSegmentTree(tree, idx<<1|1, mid+1, right)
+}
+
+func (s *SegmentTree) Update(idx int) {
+	// You can update the node of 'idx'.
+	// Sometimes you're not in need to update all the sons in time.
+	// The 'lazy' field of node maybe the better choice.
+}
+
+func (s *SegmentTree) Query(cond ...interface{}) {
+	// Query operation should be influenced by the
+	// situation.
+}
