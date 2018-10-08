@@ -9,7 +9,7 @@ func (tree *SplayTree) Search(value int) bool {
 	if target == nil {
 		return false
 	}
-	tree.node = splay(tree.node)
+	tree.node = splay(target)
 	return true
 }
 
